@@ -1,0 +1,22 @@
+# Wave related
+word: "GG"
+wave-started:
+  - "&cWave started"
+  - "Type gg for &c500$"
+wave-ended:
+  - "The wave has ended!"
+  - "&dTest line 2"
+wave-length: 10
+reward-commands:
+  - "eco give {player} 500"
+reward-messages:
+  #- "&cYou received something idk what"
+  - NONE
+
+# Permissions related
+wave-already-active:
+  - "&cThe wave is already active!"
+wave-reloaded:
+  - "&aYML File reloaded succesfully!"
+wave-command-started:
+  - "&aYou've started a chat wave!"
