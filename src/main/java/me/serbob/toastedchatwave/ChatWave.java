@@ -96,11 +96,13 @@ public class ChatWave implements CommandExecutor, Listener {
         if(playersReceived.contains(player)) {
             return;
         }
-        for(String msg: plugin.getConfig().getStringList("reward-messages")) {
-            if (!msg.equalsIgnoreCase("NONE")) {
-                player.sendMessage(ChatwaveUtil.c(msg));
+        Bukkit.getScheduler().runTaskLater(ToastedChatWave.instance, () -> {
+            for(String msg: plugin.getConfig().getStringList("reward-messages")) {
+                if (!msg.equalsIgnoreCase("NONE")) {
+                    player.sendMessage(ChatwaveUtil.c(msg));
+                }
             }
-        }
+        }, 1L);
         Bukkit.getScheduler().runTask(plugin, new Runnable() {
             @Override
             public void run() {
