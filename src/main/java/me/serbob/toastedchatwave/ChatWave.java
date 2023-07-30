@@ -1,6 +1,7 @@
 package me.serbob.toastedchatwave;
 
 import me.serbob.toastedchatwave.Util.ChatwaveUtil;
+import me.serbob.toastedchatwave.Util.TierUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -96,14 +97,14 @@ public class ChatWave implements CommandExecutor, Listener {
             return;
         }
         for(String msg: plugin.getConfig().getStringList("reward-messages")) {
-            if(!msg.equalsIgnoreCase("NONE")) {
+            if (!msg.equalsIgnoreCase("NONE")) {
                 player.sendMessage(ChatwaveUtil.c(msg));
             }
         }
         Bukkit.getScheduler().runTask(plugin, new Runnable() {
             @Override
             public void run() {
-                for(String msg: plugin.getConfig().getStringList("reward-commands")) {
+                for(String msg: plugin.getConfig().getStringList("reward-commands."+ TierUtils.getHighestTier(player))) {
                     if(!msg.equalsIgnoreCase("NONE")) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), msg
                                 .replace("{player}",player.getName()));

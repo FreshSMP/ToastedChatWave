@@ -7,8 +7,13 @@ wave-ended:
   - "The wave has ended!"
   - "&dTest line 2"
 wave-length: 10
-reward-commands:
-  - "eco give {player} 500"
+reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
+  tier1:
+    - "msg {player} tier1"
+    - "eco give {player} 500"
+  tier2:
+    - "msg {player} tier2"
+    - "eco give {player} 1000"
 reward-messages:
   #- "&cYou received something idk what"
   - NONE

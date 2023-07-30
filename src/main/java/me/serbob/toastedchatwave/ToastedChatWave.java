@@ -3,22 +3,26 @@ package me.serbob.toastedchatwave;
 import me.serbob.toastedchatwave.TabCompleters.ChatwaveTabCompleter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 
 public final class ToastedChatWave extends JavaPlugin {
+    public static ToastedChatWave instance;
     private File configFile;
     private YamlConfiguration config;
     @Override
     public void onEnable() {
+        instance=this;
         saveDefaultConfig();
         configFile = new File(getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
         getServer().getPluginManager().registerEvents(new ChatWave(this),this);
         getCommand("wave").setExecutor(new ChatWave(this));
         getCommand("wave").setTabCompleter(new ChatwaveTabCompleter());
+        registerPermissions();
     }
 
     @Override
@@ -37,4 +41,15 @@ public final class ToastedChatWave extends JavaPlugin {
             throw new RuntimeException(e);
         }
     }
+    public void registerPermissions() {
+        for(String key:config.getConfigurationSection("reward-commands").getKeys(false)) {
+            String permissionName = "wave.reward."+key;
+            if(getServer().getPluginManager().getPermission(permissionName)==null) {
+                Permission permission = new Permission(permissionName);
+                getServer().getPluginManager().addPermission(permission);
+            }
+        }
+        System.out.println("Permissinos reigstered!");
+    }
+
 }
