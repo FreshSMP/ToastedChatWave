@@ -1,5 +1,6 @@
 # Wave related
 word: "GG"
+bold: true
 wave-started:
   - "&cWave started"
   - "Type gg for &c500$"
@@ -14,10 +15,29 @@ reward-commands: # it will take priority by the following number after tier, e.g
   tier2:
     - "msg {player} tier2"
     - "eco give {player} 1000"
+change_name_color: true
+message_format: "{player}: {message}" # only if change_name_color is true
+reward-colors:
+  - "&a"
+  - "&b"
+  - "&c"
+  - "&d"
+  - "&e"
+  - "&f"
+  # - "&#084CFB" only 1.16+
+  - "&0"
+  - "&1"
+  - "&2"
+  - "&3"
+  - "&4"
+  - "&5"
+  - "&6"
+  - "&7"
+  - "&8"
+  - "&9"
 reward-messages:
   #- "&cYou received something idk what"
   - NONE
-
 # Permissions related
 wave-already-active:
   - "&cThe wave is already active!"

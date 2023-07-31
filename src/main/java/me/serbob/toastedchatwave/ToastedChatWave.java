@@ -1,5 +1,7 @@
 package me.serbob.toastedchatwave;
 
+import me.serbob.toastedchatwave.Commands.ChatWaveCommand;
+import me.serbob.toastedchatwave.Listeners.ChatWave;
 import me.serbob.toastedchatwave.Metrics.Metrics;
 import me.serbob.toastedchatwave.TabCompleters.ChatwaveTabCompleter;
 import org.bukkit.Bukkit;
@@ -24,8 +26,8 @@ public final class ToastedChatWave extends JavaPlugin {
         saveDefaultConfig();
         configFile = new File(getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-        getServer().getPluginManager().registerEvents(new ChatWave(this),this);
-        getCommand("wave").setExecutor(new ChatWave(this));
+        getServer().getPluginManager().registerEvents(new ChatWave(),this);
+        getCommand("wave").setExecutor(new ChatWaveCommand());
         getCommand("wave").setTabCompleter(new ChatwaveTabCompleter());
         registerPermissions();
         enableMetrics();
