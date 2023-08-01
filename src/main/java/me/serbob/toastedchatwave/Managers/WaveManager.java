@@ -14,11 +14,14 @@ import java.util.Random;
 public class WaveManager {
     public static boolean isActive=false;
     public static List<Player> playersReceived = new ArrayList<>();
-    public static boolean isAvailable(Player player,String message) {
-        if(!isActive) {
+    public static boolean receiveRewards(Player player) {
+        if(playersReceived.contains(player)) {
             return false;
         }
-        if(playersReceived.contains(player)) {
+        return true;
+    }
+    public static boolean isAvailable(Player player,String message) {
+        if(!isActive) {
             return false;
         }
         if(!ChatColor.stripColor(message).equalsIgnoreCase(ToastedChatWave.instance.getConfig().getString("word"))) {
