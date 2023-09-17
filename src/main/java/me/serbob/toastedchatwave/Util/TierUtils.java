@@ -5,9 +5,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Set;
 
+import static me.serbob.toastedchatwave.Managers.WaveManager.currentWave;
+
 public class TierUtils {
     public static String getHighestTier(Player player) {
-        Set<String> tiers = ToastedChatWave.instance.getConfig().getConfigurationSection("reward-commands").getKeys(false);
+        Set<String> tiers = ToastedChatWave.instance.getConfig().getConfigurationSection("waves."+currentWave+".reward-commands").getKeys(false);
         int highestTier = 0;
 
         for (String tier : tiers) {

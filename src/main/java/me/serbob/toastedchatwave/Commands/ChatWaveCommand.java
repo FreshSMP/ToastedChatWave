@@ -12,20 +12,23 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.serbob.toastedchatwave.Managers.WaveManager.isActive;
-import static me.serbob.toastedchatwave.Managers.WaveManager.playersReceived;
+import static me.serbob.toastedchatwave.Managers.WaveManager.*;
 
 public class ChatWaveCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(args.length<1) {
-            sender.sendMessage(ChatColor.RED + "Usage: /wave <reload/start>");
+            sender.sendMessage(ChatColor.RED + "Invalid args");
             return false;
         }
         if(args[0].equalsIgnoreCase("start")) {
             if(!sender.hasPermission("wave.start")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
                 return true;
+            }
+            if(args.length<2) {
+                sender.sendMessage(ChatColor.RED + "Usage: /wave start <wave>");
+                return false;
             }
             if (isActive) {
                 sender.sendMessage(ChatColor.RED + "Chat wave is already active");
@@ -36,6 +39,10 @@ public class ChatWaveCommand implements CommandExecutor {
                 }
                 return true;
             }
+            if(ToastedChatWave.instance.getConfig().get("waves."+args[1])==null) {
+                sender.sendMessage(ChatwaveUtil.c("&cInvalid wave!"));
+                return false;
+            }
             if(sender instanceof Player) {
                 for(String message: ToastedChatWave.instance.getConfig().getStringList("wave-command-started")) {
                     if(!message.equalsIgnoreCase("NONE")) {
@@ -44,20 +51,21 @@ public class ChatWaveCommand implements CommandExecutor {
                 }
             }
             isActive = true;
+            currentWave = args[1];
             playersReceived.clear();
-            for(String message: ToastedChatWave.instance.getConfig().getStringList("wave-started")) {
+            for(String message: ToastedChatWave.instance.getConfig().getStringList("waves."+currentWave+".wave-started")) {
                 if(!message.equalsIgnoreCase("NONE")) {
                     Bukkit.broadcastMessage(ChatwaveUtil.c(message));
                 }
             }
             Bukkit.getScheduler().runTaskLaterAsynchronously(ToastedChatWave.instance, () -> {
                 isActive = false;
-                for(String message: ToastedChatWave.instance.getConfig().getStringList("wave-ended")) {
+                for(String message: ToastedChatWave.instance.getConfig().getStringList("waves."+currentWave+".wave-ended")) {
                     if(!message.equalsIgnoreCase("NONE")) {
                         Bukkit.broadcastMessage(ChatwaveUtil.c(message));
                     }
                 }
-            }, 20L * ToastedChatWave.instance.getConfig().getInt("wave-length"));
+            }, 20L * ToastedChatWave.instance.getConfig().getInt("waves."+currentWave+".wave-length"));
         } else if(args[0].equalsIgnoreCase("reload")) {
             if(!sender.hasPermission("wave.reload")) {
                 sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");

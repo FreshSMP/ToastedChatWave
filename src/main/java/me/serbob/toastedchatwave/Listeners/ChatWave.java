@@ -21,10 +21,8 @@ public class ChatWave implements Listener {
             sendRewards(player);
             manageAftermath(player);
         }
-        if(ToastedChatWave.instance.getConfig().getBoolean("change_name_color")) {
-            Bukkit.broadcastMessage(formatFinalMessage(player,event.getMessage()));
-            event.setCancelled(true);
-        }
-        else event.setMessage(formatFinalMessage(player,event.getMessage()));
+        //Bukkit.broadcastMessage(formatFinalMessage(player,event.getMessage()));
+        event.setFormat(formatFinalMessage(player,event.getMessage()));
+        //event.setCancelled(true);
     }
 }

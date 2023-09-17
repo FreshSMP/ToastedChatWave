@@ -1,22 +1,41 @@
 # Wave related
-word: "GG"
-bold: true
-wave-started:
-  - "&cWave started"
-  - "Type gg for &c500$"
-wave-ended:
-  - "The wave has ended!"
-  - "&dTest line 2"
-wave-length: 10
-reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
-  tier1:
-    - "msg {player} tier1"
-    - "eco give {player} 500"
-  tier2:
-    - "msg {player} tier2"
-    - "eco give {player} 1000"
-change_name_color: true
-message_format: "{player}: {message}" # only if change_name_color is true
+waves:
+  gg_wave:
+    word: "GG"
+    wave-started:
+      - "&cWave started"
+      - "Type gg for &c500$"
+    wave-ended:
+      - "The wave has ended!"
+      - "&dTest line 2"
+    wave-length: 10
+    reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
+      tier1:
+        - "msg {player} tier1 gg wave"
+        - "eco give {player} 500 gg wave"
+      tier2:
+        - "msg {player} tier2 gg wave"
+        - "eco give {player} 1000 gg wave"
+  l_wave:
+    word: "L"
+    wave-started:
+      - "&cWave started"
+      - "Type L for &c500$"
+    wave-ended:
+      - "The L wave has ended!"
+      - "&dTest line 2"
+    wave-length: 10
+    reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
+      tier1:
+        - "msg {player} tier1 L wave"
+        - "eco give {player} 500 L wave"
+      tier2:
+        - "msg {player} tier2 L wave"
+        - "eco give {player} 1000 L wave"
+permissions: # this is used for reward-commands to register the perms the player can use
+  - tier1
+  - tier2
+message_format: "&k&l| &r{color}&l{player}: {message}" # only if change_name_color is true
 reward-colors:
   - "&a"
   - "&b"

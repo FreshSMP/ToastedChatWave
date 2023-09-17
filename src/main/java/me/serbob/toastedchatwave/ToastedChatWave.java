@@ -50,14 +50,14 @@ public final class ToastedChatWave extends JavaPlugin {
         }
     }
     public void registerPermissions() {
-        for(String key:config.getConfigurationSection("reward-commands").getKeys(false)) {
+        for(String key:config.getStringList("permissions")) {
             String permissionName = "wave.reward."+key;
             if(getServer().getPluginManager().getPermission(permissionName)==null) {
                 Permission permission = new Permission(permissionName);
                 getServer().getPluginManager().addPermission(permission);
             }
         }
-        System.out.println("Permissinos reigstered!");
+        System.out.println("Permissions reigstered!");
     }
     public void enableMetrics() {
         Metrics metrics = new Metrics(this,19314);
