@@ -1,4 +1,5 @@
 # Wave related
+show_in_chat_method: "message_reformat" # you can also put instead of 'message_reformat' 'broadcast'
 waves:
   gg_wave:
     word: "GG"
@@ -11,11 +12,11 @@ waves:
     wave-length: 10
     reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
       tier1:
-        - "msg {player} tier1 gg wave"
-        - "eco give {player} 500 gg wave"
+        - "100:msg {player} tier1 gg wave"
+        - "20:eco give {player} 500 gg wave"
       tier2:
-        - "msg {player} tier2 gg wave"
-        - "eco give {player} 1000 gg wave"
+        - "70:msg {player} tier2 gg wave"
+        - "20:eco give {player} 1000 gg wave"
   l_wave:
     word: "L"
     wave-started:
@@ -27,15 +28,16 @@ waves:
     wave-length: 10
     reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
       tier1:
-        - "msg {player} tier1 L wave"
-        - "eco give {player} 500 L wave"
+        - "100:msg {player} tier1 L wave"
+        - "50:eco give {player} 500 L wave"
       tier2:
-        - "msg {player} tier2 L wave"
-        - "eco give {player} 1000 L wave"
+        - "100:msg {player} tier2 L wave"
+        - "30:eco give {player} 1000 L wave"
 permissions: # this is used for reward-commands to register the perms the player can use
   - tier1
   - tier2
-message_format: "&k&l| &r{color}&l{player}: {message}" # only if change_name_color is true
+message_format: "&k&l| &r{color}&l{playerDisplayName}: {message}" # you can also use {playerName]/{player] -> they only show the name
+# ^^^ -> you can also use placeholders e.g. %gradientdisplayname%
 reward-colors:
   - "&a"
   - "&b"

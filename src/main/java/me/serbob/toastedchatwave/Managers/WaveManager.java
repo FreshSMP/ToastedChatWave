@@ -1,15 +1,20 @@
 package me.serbob.toastedchatwave.Managers;
 
+import me.serbob.toastedchatwave.APIs.PlaceholderAPI;
 import me.serbob.toastedchatwave.ToastedChatWave;
 import me.serbob.toastedchatwave.Util.ChatwaveUtil;
 import me.serbob.toastedchatwave.Util.TierUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
 
 public class WaveManager {
     public static boolean isActive=false;
@@ -43,10 +48,22 @@ public class WaveManager {
         Bukkit.getScheduler().runTask(ToastedChatWave.instance, new Runnable() {
             @Override
             public void run() {
-                for(String msg: ToastedChatWave.instance.getConfig().getStringList("waves."+currentWave+".reward-commands."+ TierUtils.getHighestTier(player))) {
-                    if(!msg.equalsIgnoreCase("NONE")) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), msg
-                                .replace("{player}",player.getName()));
+                Random random = new Random();
+                for(String command: ToastedChatWave.instance.getConfig().getStringList("waves."+currentWave+".reward-commands."+ TierUtils.getHighestTier(player))) {
+                    if(!command.equalsIgnoreCase("NONE")) {
+                        String[] parts = command.split(":");
+                        if (parts.length == 2) {
+                            int probability = Integer.parseInt(parts[0]);
+                            String cmd = parts[1];
+                            int randomNumber = random.nextInt(100) + 1;
+                            if (randomNumber <= probability) {
+                                String finalCommand = cmd.replace("{player}", player.getName());
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+                            }
+                        } else {
+                            String finalCommand = command.replace("{player}", player.getName());
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+                        }
                     }
                 }
             }
@@ -63,15 +80,61 @@ public class WaveManager {
         String randomColor = getRandomColor(rewardColors);
         String formattedConfigMessage = ToastedChatWave.instance.getConfig().getString("message_format");
 
-        return ChatwaveUtil.c(formattedConfigMessage
+        String newMessage = ChatwaveUtil.c(formattedConfigMessage
                 .replace("{player}",player.getName())
+                .replace("{playerName}",player.getName())
+                .replace("{playerDisplayName}",player.getDisplayName())
                 .replace("{message}",message)
                 .replace("{color}",randomColor));
+        if(isPAPIenabled()) {
+            String possibleMessage = replacePlayerStatisticPlaceholder(player,newMessage);
+            if(!possibleMessage.equalsIgnoreCase(" ")) {
+                newMessage = possibleMessage;
+            }
+        }
+        return newMessage;
     }
-
     private static String getRandomColor(List<String> rewardColors) {
         Random random = new Random();
         int index = random.nextInt(rewardColors.size());
         return rewardColors.get(index);
+    }
+    public static String replacePlayerStatisticPlaceholder(OfflinePlayer player, String input) {
+        input = input.replace("{playerName}",player.getName());
+        //System.out.println(getTotalBlocksMined(player)+"");
+        while (input.contains("%")) {
+            int startIndex;
+            int endIndex;
+            startIndex = input.indexOf("%");
+            endIndex = input.indexOf("%",startIndex+1);
+
+            if (startIndex < endIndex) {
+                String placeholder = input.substring(startIndex, endIndex + 1);
+                String statisticName = input.substring(startIndex + 1, endIndex);
+
+                try {
+                    String formattedValue;
+                    if (isPAPIenabled()) {
+                        try {
+                            String parsedPlaceholder = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, "%"+statisticName+"%");
+                            formattedValue = parsedPlaceholder;
+                        } catch (Exception ignored) {
+                            formattedValue = "";
+                        }
+                    } else {
+                        formattedValue = " ";
+                    }
+                    formattedValue=formattedValue.replace("%","");
+                    input = input.replace(placeholder, formattedValue);
+                } catch (Exception ignored){
+                    input = input.replace(placeholder, "");
+                }
+            } else {
+                input = input.replace("}", "");
+                input = input.replace("%","");
+            }
+        }
+
+        return input;
     }
 }
