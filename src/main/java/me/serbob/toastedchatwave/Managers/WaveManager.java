@@ -7,33 +7,40 @@ import me.serbob.toastedchatwave.Util.TierUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
 
 public class WaveManager {
-    public static boolean isActive=false;
+    public static boolean isActive = false;
     public static List<Player> playersReceived = new ArrayList<>();
     public static String currentWave;
+
     public static boolean receiveRewards(Player player) {
-        if(playersReceived.contains(player)) {
-            return false;
-        }
-        return true;
+        return !playersReceived.contains(player);
     }
-    public static boolean isAvailable(Player player,String message) {
-        if(!isActive) {
+
+    public static boolean isAvailable(Player player, String message) {
+        if (!isActive) {
             return false;
         }
-        if(!ChatColor.stripColor(message).equalsIgnoreCase(ToastedChatWave.instance.getConfig().getString("waves."+currentWave+".word"))) {
-            return false;
+        String waveWord = ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word");
+        boolean isWildcard = ToastedChatWave.instance.getConfig().getBoolean("waves." + currentWave + ".wildcard", false);
+
+        if (isWildcard) {
+            return containsWordIgnoreCase(message, waveWord);
+        } else {
+            return ChatColor.stripColor(message).equalsIgnoreCase(waveWord);
         }
-        return true;
+    }
+
+    private static boolean containsWordIgnoreCase(String message, String word) {
+        return Pattern.compile(Pattern.quote(word), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
     public static void sendRewardMessages(Player player) {
         Bukkit.getScheduler().runTaskLater(ToastedChatWave.instance, () -> {
