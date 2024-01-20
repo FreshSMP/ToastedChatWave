@@ -7,6 +7,7 @@ import me.serbob.toastedchatwave.Util.TierUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -17,16 +18,17 @@ import java.util.regex.Pattern;
 import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
 
 public class WaveManager {
-    public static boolean isActive = false;
+    public static boolean isActive=false;
     public static List<Player> playersReceived = new ArrayList<>();
     public static String currentWave;
-
     public static boolean receiveRewards(Player player) {
-        return !playersReceived.contains(player);
+        if(playersReceived.contains(player)) {
+            return false;
+        }
+        return true;
     }
-
-    public static boolean isAvailable(Player player, String message) {
-        if (!isActive) {
+    public static boolean isAvailable(Player player,String message) {
+        if(!isActive) {
             return false;
         }
         String waveWord = ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word");
