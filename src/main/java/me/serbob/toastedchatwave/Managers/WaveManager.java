@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
 
@@ -30,10 +31,18 @@ public class WaveManager {
         if(!isActive) {
             return false;
         }
-        if(!ChatColor.stripColor(message).equalsIgnoreCase(ToastedChatWave.instance.getConfig().getString("waves."+currentWave+".word"))) {
-            return false;
+        String waveWord = ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word");
+        boolean isWildcard = ToastedChatWave.instance.getConfig().getBoolean("waves." + currentWave + ".wildcard", false);
+
+        if (isWildcard) {
+            return containsWordIgnoreCase(message, waveWord);
+        } else {
+            return ChatColor.stripColor(message).equalsIgnoreCase(waveWord);
         }
-        return true;
+    }
+
+    private static boolean containsWordIgnoreCase(String message, String word) {
+        return Pattern.compile(Pattern.quote(word), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
     public static void sendRewardMessages(Player player) {
         Bukkit.getScheduler().runTaskLater(ToastedChatWave.instance, () -> {

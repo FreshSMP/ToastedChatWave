@@ -3,6 +3,7 @@ show_in_chat_method: "message_reformat" # you can also put instead of 'message_r
 waves:
   gg_wave:
     word: "GG"
+    wildcard: false
     wave-started:
       - "&cWave started"
       - "Type gg for &c500$"
