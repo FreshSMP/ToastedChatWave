@@ -1,5 +1,6 @@
 # Wave related
 show_in_chat_method: "message_reformat" # you can also put instead of 'message_reformat' 'broadcast'
+chat_listener_priority: "HIGHEST" # Set the priority for chat event listening (LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR)
 waves:
   gg_wave:
     word: "GG"
@@ -20,6 +21,7 @@ waves:
         - "20:eco give {player} 1000 gg wave"
   l_wave:
     word: "L"
+    wildcard: false
     wave-started:
       - "&cWave started"
       - "Type L for &c500$"

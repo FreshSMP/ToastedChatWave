@@ -96,10 +96,9 @@ public class WaveManager {
                 .replace("{message}",message)
                 .replace("{color}",randomColor));
         if(isPAPIenabled()) {
-            String possibleMessage = replacePlayerStatisticPlaceholder(player,newMessage);
-            if(!possibleMessage.equalsIgnoreCase(" ")) {
+            String possibleMessage = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, newMessage);
+            if (!possibleMessage.equalsIgnoreCase(" "))
                 newMessage = possibleMessage;
-            }
         }
         return newMessage;
     }
@@ -107,43 +106,5 @@ public class WaveManager {
         Random random = new Random();
         int index = random.nextInt(rewardColors.size());
         return rewardColors.get(index);
-    }
-    public static String replacePlayerStatisticPlaceholder(OfflinePlayer player, String input) {
-        input = input.replace("{playerName}",player.getName());
-        //System.out.println(getTotalBlocksMined(player)+"");
-        while (input.contains("%")) {
-            int startIndex;
-            int endIndex;
-            startIndex = input.indexOf("%");
-            endIndex = input.indexOf("%",startIndex+1);
-
-            if (startIndex < endIndex) {
-                String placeholder = input.substring(startIndex, endIndex + 1);
-                String statisticName = input.substring(startIndex + 1, endIndex);
-
-                try {
-                    String formattedValue;
-                    if (isPAPIenabled()) {
-                        try {
-                            String parsedPlaceholder = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, "%"+statisticName+"%");
-                            formattedValue = parsedPlaceholder;
-                        } catch (Exception ignored) {
-                            formattedValue = "";
-                        }
-                    } else {
-                        formattedValue = " ";
-                    }
-                    formattedValue=formattedValue.replace("%","");
-                    input = input.replace(placeholder, formattedValue);
-                } catch (Exception ignored){
-                    input = input.replace(placeholder, "");
-                }
-            } else {
-                input = input.replace("}", "");
-                input = input.replace("%","");
-            }
-        }
-
-        return input;
     }
 }

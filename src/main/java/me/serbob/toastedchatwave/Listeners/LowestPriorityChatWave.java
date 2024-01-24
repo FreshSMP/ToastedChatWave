@@ -11,12 +11,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static me.serbob.toastedchatwave.Managers.WaveManager.*;
+import static me.serbob.toastedchatwave.Managers.WaveManager.formatFinalMessage;
 
-public class ChatWave implements Listener {
-    public EventPriority currentEventPriority;
-    public ChatWave(EventPriority currentEventPriority) {
-        this.currentEventPriority=currentEventPriority;
-    }
+public class LowestPriorityChatWave implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();

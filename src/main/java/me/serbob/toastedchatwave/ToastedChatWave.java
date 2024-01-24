@@ -1,12 +1,13 @@
 package me.serbob.toastedchatwave;
 
 import me.serbob.toastedchatwave.Commands.ChatWaveCommand;
-import me.serbob.toastedchatwave.Listeners.ChatWave;
+import me.serbob.toastedchatwave.Listeners.*;
 import me.serbob.toastedchatwave.Metrics.Metrics;
 import me.serbob.toastedchatwave.TabCompleters.ChatwaveTabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventPriority;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,16 +27,43 @@ public final class ToastedChatWave extends JavaPlugin {
         saveDefaultConfig();
         configFile = new File(getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
-        getServer().getPluginManager().registerEvents(new ChatWave(),this);
+
+        String eventPriority = getConfig().getString("chat_listener_priority");
+        if(eventPriority==null) {
+            getServer().getPluginManager().registerEvents(new HighestPriorityChatWave(), this);
+        } else {
+            registerEventHandlers(eventPriority);
+        }
+
         getCommand("wave").setExecutor(new ChatWaveCommand());
         getCommand("wave").setTabCompleter(new ChatwaveTabCompleter());
         registerPermissions();
         enableMetrics();
     }
-
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+    private void registerEventHandlers(String eventPriority) {
+        switch (eventPriority.toLowerCase()) {
+            case "lowest":
+                getServer().getPluginManager().registerEvents(new LowestPriorityChatWave(), this);
+                break;
+            case "low":
+                getServer().getPluginManager().registerEvents(new LowPriorityChatWave(), this);
+                break;
+            case "normal":
+                getServer().getPluginManager().registerEvents(new NormalPriorityChatWave(), this);
+                break;
+            case "high":
+                getServer().getPluginManager().registerEvents(new HighPriorityChatWave(), this);
+                break;
+            case "monitor":
+                getServer().getPluginManager().registerEvents(new MonitorPriorityChatWave(), this);
+                break;
+            default:
+                getServer().getPluginManager().registerEvents(new HighestPriorityChatWave(), this);
+        }
     }
     public void reloadConf() {
         configFile = new File(getDataFolder(), "config.yml");

@@ -11,13 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static me.serbob.toastedchatwave.Managers.WaveManager.*;
+import static me.serbob.toastedchatwave.Managers.WaveManager.formatFinalMessage;
 
-public class ChatWave implements Listener {
-    public EventPriority currentEventPriority;
-    public ChatWave(EventPriority currentEventPriority) {
-        this.currentEventPriority=currentEventPriority;
-    }
-    @EventHandler(priority = EventPriority.LOWEST)
+public class NormalPriorityChatWave implements Listener {
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if(!isAvailable(player,event.getMessage()))
