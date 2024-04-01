@@ -4,7 +4,7 @@ chat_listener_priority: "HIGHEST" # Set the priority for chat event listening (L
 waves:
   gg_wave:
     word: "GG"
-    wildcard: false
+
     wave-started:
       - "&cWave started"
       - "Type gg for &c500$"

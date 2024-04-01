@@ -1,7 +1,7 @@
 name: ToastedChatWave
 version: '${project.version}'
 main: me.serbob.toastedchatwave.ToastedChatWave
-api-version: 1.19
+api-version: 1.13
 authors: [ Serbob ]
 description: A chat wave plugin.
 commands:
