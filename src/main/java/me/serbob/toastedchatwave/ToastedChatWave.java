@@ -1,13 +1,12 @@
 package me.serbob.toastedchatwave;
 
 import me.serbob.toastedchatwave.Commands.ChatWaveCommand;
-import me.serbob.toastedchatwave.Listeners.*;
+import me.serbob.toastedchatwave.Listeners.priorities.*;
 import me.serbob.toastedchatwave.Metrics.Metrics;
 import me.serbob.toastedchatwave.TabCompleters.ChatwaveTabCompleter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.EventPriority;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 

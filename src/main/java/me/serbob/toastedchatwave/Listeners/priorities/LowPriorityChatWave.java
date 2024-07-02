@@ -1,4 +1,4 @@
-package me.serbob.toastedchatwave.Listeners;
+package me.serbob.toastedchatwave.Listeners.priorities;
 
 import me.serbob.toastedchatwave.ToastedChatWave;
 import me.serbob.toastedchatwave.Util.ChatwaveUtil;
@@ -13,8 +13,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import static me.serbob.toastedchatwave.Managers.WaveManager.*;
 import static me.serbob.toastedchatwave.Managers.WaveManager.formatFinalMessage;
 
-public class HighestPriorityChatWave implements Listener {
-    @EventHandler(priority = EventPriority.HIGHEST)
+public class LowPriorityChatWave implements Listener {
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         if(!isAvailable(player,event.getMessage()))

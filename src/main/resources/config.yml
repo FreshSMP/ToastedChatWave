@@ -3,8 +3,9 @@ show_in_chat_method: "message_reformat" # you can also put instead of 'message_r
 chat_listener_priority: "HIGHEST" # Set the priority for chat event listening (LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR)
 waves:
   gg_wave:
+    execute_on: "join" # Available options: none, on_join, on_leave, etc.
     word: "GG"
-
+    wildcard: false
     wave-started:
       - "&cWave started"
       - "Type gg for &c500$"

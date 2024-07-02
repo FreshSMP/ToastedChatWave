@@ -1,4 +1,4 @@
-package me.serbob.toastedchatwave.Listeners;
+package me.serbob.toastedchatwave.Listeners.priorities;
 
 import me.serbob.toastedchatwave.ToastedChatWave;
 import me.serbob.toastedchatwave.Util.ChatwaveUtil;
