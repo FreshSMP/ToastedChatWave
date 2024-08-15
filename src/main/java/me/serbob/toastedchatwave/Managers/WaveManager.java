@@ -1,110 +1,97 @@
 package me.serbob.toastedchatwave.Managers;
 
-import me.serbob.toastedchatwave.APIs.PlaceholderAPI;
 import me.serbob.toastedchatwave.ToastedChatWave;
-import me.serbob.toastedchatwave.Util.ChatwaveUtil;
+import me.serbob.toastedchatwave.Util.ChatUtil;
 import me.serbob.toastedchatwave.Util.TierUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
 
 public class WaveManager {
-    public static boolean isActive=false;
-    public static List<Player> playersReceived = new ArrayList<>();
+    public static boolean isActive = false;
+    public static Set<Player> playersReceived = new HashSet<>();
     public static String currentWave;
+    private static final Random random = new Random();
+
     public static boolean receiveRewards(Player player) {
-        if(playersReceived.contains(player)) {
-            return false;
-        }
-        return true;
+        return !playersReceived.contains(player);
     }
-    public static boolean isAvailable(Player player,String message) {
-        if(!isActive) {
-            return false;
-        }
-        String waveWord = ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word");
+
+    public static boolean isAvailable(String message) {
+        if (!isActive) return false;
+
+        String waveWord = ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word", "");
         boolean isWildcard = ToastedChatWave.instance.getConfig().getBoolean("waves." + currentWave + ".wildcard", false);
 
-        if (isWildcard) {
-            return containsWordIgnoreCase(message, waveWord);
-        } else {
-            return ChatColor.stripColor(message).equalsIgnoreCase(waveWord);
-        }
+        message = ChatColor.stripColor(message);
+
+        return isWildcard ? containsWordIgnoreCase(message, waveWord)
+                : message.equalsIgnoreCase(waveWord);
     }
 
     private static boolean containsWordIgnoreCase(String message, String word) {
         return Pattern.compile(Pattern.quote(word), Pattern.CASE_INSENSITIVE).matcher(message).find();
     }
+
     public static void sendRewardMessages(Player player) {
-        Bukkit.getScheduler().runTaskLater(ToastedChatWave.instance, () -> {
-            for(String msg: ToastedChatWave.instance.getConfig().getStringList("reward-messages")) {
-                if (!msg.equalsIgnoreCase("NONE")) {
-                    player.sendMessage(ChatwaveUtil.c(msg));
-                }
-            }
-        }, 1L);
+        Bukkit.getScheduler().runTaskLater(ToastedChatWave.instance, () ->
+                ToastedChatWave.instance.getConfig().getStringList("reward-messages").stream()
+                        .filter(msg -> !msg.equalsIgnoreCase("NONE"))
+                        .forEach(msg -> player.sendMessage(ChatUtil.c(msg))), 1L);
     }
+
     public static void sendRewards(Player player) {
-        Bukkit.getScheduler().runTask(ToastedChatWave.instance, new Runnable() {
-            @Override
-            public void run() {
-                Random random = new Random();
-                for(String command: ToastedChatWave.instance.getConfig().getStringList("waves."+currentWave+".reward-commands."+ TierUtils.getHighestTier(player))) {
-                    if(!command.equalsIgnoreCase("NONE")) {
-                        String[] parts = command.split(":");
-                        if (parts.length == 2) {
-                            int probability = Integer.parseInt(parts[0]);
-                            String cmd = parts[1];
-                            int randomNumber = random.nextInt(100) + 1;
-                            if (randomNumber <= probability) {
-                                String finalCommand = cmd.replace("{player}", player.getName());
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
-                            }
-                        } else {
-                            String finalCommand = command.replace("{player}", player.getName());
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
-                        }
-                    }
-                }
-            }
+        Bukkit.getScheduler().runTask(ToastedChatWave.instance, () -> {
+            String tierPath = "waves." + currentWave + ".reward-commands." + TierUtils.getHighestTier(player);
+            ToastedChatWave.instance.getConfig().getStringList(tierPath).stream()
+                    .filter(command -> !command.equalsIgnoreCase("NONE"))
+                    .forEach(command -> executeCommand(command, player));
         });
     }
+
+    private static void executeCommand(String command, Player player) {
+        String[] parts = command.split(":", 2);
+        if (parts.length == 2) {
+            int probability = Integer.parseInt(parts[0]);
+            if (ThreadLocalRandom.current().nextInt(100) < probability) {
+                dispatchCommand(parts[1], player);
+            }
+        } else {
+            dispatchCommand(command, player);
+        }
+    }
+
+    private static void dispatchCommand(String command, Player player) {
+        String finalCommand = command.replace("{player}", player.getName());
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+    }
+
     public static void manageAftermath(Player player) {
         playersReceived.add(player);
     }
+
     public static String formatFinalMessage(Player player, String message) {
         List<String> rewardColors = ToastedChatWave.instance.getConfig().getStringList("reward-colors");
-        if (rewardColors.isEmpty()) {
-            rewardColors.add(" ");
-        }
-        String randomColor = getRandomColor(rewardColors);
-        String formattedConfigMessage = ToastedChatWave.instance.getConfig().getString("message_format");
+        String randomColor = rewardColors.isEmpty() ? " " : getRandomColor(rewardColors);
+        String formattedConfigMessage = ToastedChatWave.instance.getConfig().getString("message_format", "");
 
-        String newMessage = ChatwaveUtil.c(formattedConfigMessage
-                .replace("{player}",player.getName())
-                .replace("{playerName}",player.getName())
-                .replace("{playerDisplayName}",player.getDisplayName())
-                .replace("{message}",message)
-                .replace("{color}",randomColor));
-        if(isPAPIenabled()) {
-            String possibleMessage = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, newMessage);
-            if (!possibleMessage.equalsIgnoreCase(" "))
-                newMessage = possibleMessage;
-        }
-        return newMessage;
+        String newMessage = ChatUtil.c(formattedConfigMessage
+                .replace("{player}", player.getName())
+                .replace("{playerName}", player.getName())
+                .replace("{playerDisplayName}", player.getDisplayName())
+                .replace("{message}", message)
+                .replace("{color}", randomColor));
+
+        return isPAPIenabled() ? me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, newMessage) : newMessage;
     }
+
     private static String getRandomColor(List<String> rewardColors) {
-        Random random = new Random();
-        int index = random.nextInt(rewardColors.size());
-        return rewardColors.get(index);
+        return rewardColors.get(ThreadLocalRandom.current().nextInt(rewardColors.size()));
     }
 }

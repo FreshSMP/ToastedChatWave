@@ -18,13 +18,13 @@ import java.util.concurrent.Callable;
 
 public final class ToastedChatWave extends JavaPlugin {
     public static ToastedChatWave instance;
-    private File configFile;
     private YamlConfiguration config;
+
     @Override
     public void onEnable() {
         instance=this;
         saveDefaultConfig();
-        configFile = new File(getDataFolder(), "config.yml");
+        File configFile = new File(getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
 
         String eventPriority = getConfig().getString("chat_listener_priority");
@@ -39,10 +39,12 @@ public final class ToastedChatWave extends JavaPlugin {
         registerPermissions();
         enableMetrics();
     }
+
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
+
     private void registerEventHandlers(String eventPriority) {
         switch (eventPriority.toLowerCase()) {
             case "lowest":
@@ -64,18 +66,7 @@ public final class ToastedChatWave extends JavaPlugin {
                 getServer().getPluginManager().registerEvents(new HighestPriorityChatWave(), this);
         }
     }
-    public void reloadConf() {
-        configFile = new File(getDataFolder(), "config.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
-        try {
-            config.save(configFile);
-            config.load(configFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
     public void registerPermissions() {
         for(String key:config.getStringList("permissions")) {
             String permissionName = "wave.reward."+key;
@@ -84,18 +75,17 @@ public final class ToastedChatWave extends JavaPlugin {
                 getServer().getPluginManager().addPermission(permission);
             }
         }
-        System.out.println("Permissions reigstered!");
+
+        Bukkit.getLogger().info("Permissions reigstered!");
     }
+
     public void enableMetrics() {
         Metrics metrics = new Metrics(this,19314);
-        metrics.addCustomChart(new Metrics.MultiLineChart("players_and_servers", new Callable<Map<String, Integer>>() {
-            @Override
-            public Map<String, Integer> call() throws Exception {
-                Map<String, Integer> valueMap = new HashMap<>();
-                valueMap.put("servers", 1);
-                valueMap.put("players", Bukkit.getOnlinePlayers().size());
-                return valueMap;
-            }
+        metrics.addCustomChart(new Metrics.MultiLineChart("players_and_servers", () -> {
+            Map<String, Integer> valueMap = new HashMap<>();
+            valueMap.put("servers", 1);
+            valueMap.put("players", Bukkit.getOnlinePlayers().size());
+            return valueMap;
         }));
         metrics.addCustomChart(new Metrics.DrilldownPie("java_version", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();

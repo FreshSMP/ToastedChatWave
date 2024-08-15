@@ -1,26 +1,47 @@
-# Wave related
-show_in_chat_method: "message_reformat" # you can also put instead of 'message_reformat' 'broadcast'
-chat_listener_priority: "HIGHEST" # Set the priority for chat event listening (LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR)
+# =============================================
+# ToastedChatWave Configuration
+# =============================================
+
+# Thank you for using Toasted ChatWave!
+# For support join our discord server and create a ticket
+# ➥ discord.gg/dn8YE2Ctbv
+
+# Wave Display Settings
+# ---------------------
+# Determines how the wave messages are shown in chat
+show_in_chat_method: "message_reformat"  # Options: "message_reformat" or "broadcast"
+
+# Event Priority
+# --------------
+# Sets the priority for chat event listening
+chat_listener_priority: "HIGHEST"  # Options: LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR
+
+# Wave Definitions
+# ----------------
 waves:
+  # GG Wave Configuration
   gg_wave:
-    execute_on: "join" # Available options: none, on_join, on_leave, etc.
-    word: "GG"
-    wildcard: false
-    wave-started:
+    execute_on: "join"  # Trigger condition: none, on_join, on_leave, etc.
+    word: "GG"  # The word players need to type
+    wildcard: false  # If true, the word can be part of a larger message
+    wave-started:  # Messages displayed when the wave starts
       - "&cWave started"
       - "Type gg for &c500$"
-    wave-ended:
+    wave-ended:  # Messages displayed when the wave ends
       - "The wave has ended!"
       - "&dTest line 2"
-    wave-length: 10
-    reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
+    wave-length: 10  # Duration of the wave in seconds
+    reward-commands:  # Commands executed as rewards, grouped by tier
       tier1:
-        - "100:msg {player} tier1 gg wave"
+        - "100:msg {player} tier1 gg wave"  # Format: "probability:command"
         - "20:eco give {player} 500 gg wave"
       tier2:
         - "70:msg {player} tier2 gg wave"
         - "20:eco give {player} 1000 gg wave"
+
+  # L Wave Configuration
   l_wave:
+    execute_on: "none"  # Trigger condition: none, on_join, on_leave, etc.
     word: "L"
     wildcard: false
     wave-started:
@@ -30,43 +51,68 @@ waves:
       - "The L wave has ended!"
       - "&dTest line 2"
     wave-length: 10
-    reward-commands: # it will take priority by the following number after tier, e.g. tier{number}, it will follow the {number}
+    reward-commands:
       tier1:
         - "100:msg {player} tier1 L wave"
         - "50:eco give {player} 500 L wave"
       tier2:
         - "100:msg {player} tier2 L wave"
         - "30:eco give {player} 1000 L wave"
-permissions: # this is used for reward-commands to register the perms the player can use
+
+# Permission Tiers
+# ----------------
+# Defines the available permission tiers for rewards
+permissions:
   - tier1
   - tier2
-message_format: "&k&l| &r{color}&l{playerDisplayName}: {message}" # you can also use {playerName]/{player] -> they only show the name
-# ^^^ -> you can also use placeholders e.g. %gradientdisplayname%
+
+# Message Formatting
+# ------------------
+# Defines how chat messages are formatted during a wave
+message_format: "&k&l| &r&l{playerDisplayName}: {color}{message}"
+# Available placeholders:
+# {color} - Random color from reward-colors
+# {playerDisplayName} - Player's display name
+# {playerName} or {player} - Player's name
+# You can also use PlaceholderAPI placeholders, e.g., %gradientdisplayname%
+
+# Reward Colors
+# -------------
+# List of colors used randomly in the message format
 reward-colors:
-  - "&a"
-  - "&b"
-  - "&c"
-  - "&d"
-  - "&e"
-  - "&f"
-  # - "&#084CFB" only 1.16+
-  - "&0"
-  - "&1"
-  - "&2"
-  - "&3"
-  - "&4"
-  - "&5"
-  - "&6"
-  - "&7"
-  - "&8"
-  - "&9"
+  - "&a"  # Light Green
+  - "&b"  # Aqua
+  - "&c"  # Red
+  - "&d"  # Light Purple
+  - "&e"  # Yellow
+  - "&f"  # White
+  # - "&#084CFB"  # Custom hex color (only for Minecraft 1.16+)
+  - "&0"  # Black
+  - "&1"  # Dark Blue
+  - "&2"  # Dark Green
+  - "&3"  # Dark Aqua
+  - "&4"  # Dark Red
+  - "&5"  # Dark Purple
+  - "&6"  # Gold
+  - "&7"  # Gray
+  - "&8"  # Dark Gray
+  - "&9"  # Blue
+
+# Reward Messages
+# ---------------
+# Messages sent to players when they receive a reward
 reward-messages:
   #- "&cYou received something idk what"
-  - NONE
-# Permissions related
+  - NONE  # No message will be sent
+
+# System Messages
+# ---------------
+# Messages for various plugin states and actions
 wave-already-active:
   - "&cThe wave is already active!"
+
 wave-reloaded:
-  - "&aYML File reloaded succesfully!"
+  - "&aYML File reloaded successfully!"
+
 wave-command-started:
   - "&aYou've started a chat wave!"
