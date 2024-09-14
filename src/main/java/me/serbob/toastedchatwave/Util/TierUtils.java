@@ -4,8 +4,10 @@ import me.serbob.toastedchatwave.ToastedChatWave;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static me.serbob.toastedchatwave.Managers.WaveManager.currentWave;
 
@@ -20,8 +22,8 @@ public class TierUtils {
             return null;
         }
 
-        List<String> permissions = waveSection.getStringList("permissions");
-
+        List<String> permissions = new ArrayList<>(waveSection.getConfigurationSection("reward-commands")
+                .getKeys(false));
         Optional<String> highestTier = permissions.stream()
                 .filter(tier -> tier.startsWith("tier"))
                 .filter(tier -> player.hasPermission(PERMISSION_PREFIX + tier))

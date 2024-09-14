@@ -17,10 +17,11 @@ public class ChatWave implements Listener {
     public ChatWave(EventPriority currentEventPriority) {
         this.currentEventPriority=currentEventPriority;
     }
-    @EventHandler(priority = EventPriority.LOWEST)
+
+/*    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         executeChatWave(event);
-    }
+    }*/
 
     public static void executeChatWave(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
