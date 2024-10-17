@@ -86,7 +86,10 @@ public class WaveManager {
                 .replace("{playerName}", player.getName())
                 .replace("{playerDisplayName}", player.getDisplayName())
                 .replace("{message}", message)
-                .replace("{color}", randomColor));
+                .replace("{color}", randomColor))
+                .replace("{wave}", currentWave)
+                .replace("{word}", ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word", ""))
+                ;
 
         return isPAPIenabled() ? me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, newMessage) : newMessage;
     }
