@@ -4,6 +4,7 @@ main: me.serbob.toastedchatwave.ToastedChatWave
 api-version: 1.13
 authors: [ Serbob ]
 description: A chat wave plugin.
+folia-supported: true
 commands:
   wave:
     description: Chat wave command.
