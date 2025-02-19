@@ -2,6 +2,7 @@ package me.serbob.toastedchatwave.Commands;
 
 import me.serbob.toastedchatwave.ToastedChatWave;
 import me.serbob.toastedchatwave.Util.ChatUtil;
+import me.serbob.toastedchatwave.Util.folia.FoliaScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.concurrent.TimeUnit;
 
 import static me.serbob.toastedchatwave.Managers.WaveManager.*;
 
@@ -113,10 +115,10 @@ public class ChatWaveCommand implements CommandExecutor {
 
         sendBroadcastMessages("waves." + currentWave + ".wave-started");
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(ToastedChatWave.instance, () -> {
+        FoliaScheduler.getAsyncScheduler().runDelayed(ToastedChatWave.instance, $->{
             isActive = false;
             sendBroadcastMessages("waves." + currentWave + ".wave-ended");
-        }, 20L * ToastedChatWave.instance.getConfig().getInt("waves." + currentWave + ".wave-length"));
+        }, 20L * ToastedChatWave.instance.getConfig().getInt("waves." + currentWave + ".wave-length") * 50, TimeUnit.MILLISECONDS);
     }
 
     private void sendNoPermissionMessage(CommandSender sender) {

@@ -3,12 +3,14 @@ package me.serbob.toastedchatwave.Managers;
 import me.serbob.toastedchatwave.ToastedChatWave;
 import me.serbob.toastedchatwave.Util.ChatUtil;
 import me.serbob.toastedchatwave.Util.TierUtils;
+import me.serbob.toastedchatwave.Util.folia.FoliaScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
@@ -40,18 +42,20 @@ public class WaveManager {
     }
 
     public static void sendRewardMessages(Player player) {
-        Bukkit.getScheduler().runTaskLater(ToastedChatWave.instance, () ->
+        FoliaScheduler.getAsyncScheduler().runDelayed(ToastedChatWave.instance,
+            $ -> {
                 ToastedChatWave.instance.getConfig().getStringList("reward-messages").stream()
-                        .filter(msg -> !msg.equalsIgnoreCase("NONE"))
-                        .forEach(msg -> player.sendMessage(ChatUtil.c(msg))), 1L);
+                    .filter(msg -> !msg.equalsIgnoreCase("NONE"))
+                    .forEach(msg -> player.sendMessage(ChatUtil.c(msg)));
+            }, 50, TimeUnit.MILLISECONDS);
     }
 
     public static void sendRewards(Player player) {
-        Bukkit.getScheduler().runTask(ToastedChatWave.instance, () -> {
+        FoliaScheduler.getAsyncScheduler().runNow(ToastedChatWave.instance, $->{
             String tierPath = "waves." + currentWave + ".reward-commands." + TierUtils.getHighestTier(player);
             ToastedChatWave.instance.getConfig().getStringList(tierPath).stream()
-                    .filter(command -> !command.equalsIgnoreCase("NONE"))
-                    .forEach(command -> executeCommand(command, player));
+                .filter(command -> !command.equalsIgnoreCase("NONE"))
+                .forEach(command -> executeCommand(command, player));
         });
     }
 
@@ -68,8 +72,11 @@ public class WaveManager {
     }
 
     private static void dispatchCommand(String command, Player player) {
-        String finalCommand = command.replace("{player}", player.getName());
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+        FoliaScheduler.getGlobalRegionScheduler().run(ToastedChatWave.instance, $ -> {
+            String finalCommand = command.replace("{player}", player.getName());
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
+        });
+
     }
 
     public static void manageAftermath(Player player) {
