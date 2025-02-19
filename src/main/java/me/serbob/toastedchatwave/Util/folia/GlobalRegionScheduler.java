@@ -1,22 +1,3 @@
-/*
- * This file is part of HuskClaims, licensed under the Apache License 2.0.
- *
- *  Copyright (c) William278 <will27528@gmail.com>
- *  Copyright (c) contributors
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package me.serbob.toastedchatwave.Util.folia;
 
 import org.bukkit.Bukkit;
@@ -36,6 +17,7 @@ public class GlobalRegionScheduler {
 			bukkitScheduler = Bukkit.getScheduler();
 		}
 	}
+
 	/**
 	 * Schedules a task to be executed on the global region.
 	 *
@@ -47,8 +29,10 @@ public class GlobalRegionScheduler {
 			bukkitScheduler.runTask(plugin, run);
 			return;
 		}
+
 		globalRegionScheduler.execute(plugin, run);
 	}
+
 	/**
 	 * Schedules a task to be executed on the global region.
 	 *
@@ -60,8 +44,10 @@ public class GlobalRegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTask(plugin, () -> task.accept(null)));
 		}
+
 		return new TaskWrapper(globalRegionScheduler.run(plugin, (o) -> task.accept(null)));
 	}
+
 	/**
 	 * Schedules a task to be executed on the global region after the specified delay in ticks.
 	 *
@@ -75,8 +61,10 @@ public class GlobalRegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskLater(plugin, () -> task.accept(null), delay));
 		}
+
 		return new TaskWrapper(globalRegionScheduler.runDelayed(plugin, (o) -> task.accept(null), delay));
 	}
+
 	/**
 	 * Schedules a repeating task to be executed on the global region after the initial delay with the specified period.
 	 *
@@ -92,8 +80,10 @@ public class GlobalRegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskTimer(plugin, () -> task.accept(null), initialDelayTicks, periodTicks));
 		}
+
 		return new TaskWrapper(globalRegionScheduler.runAtFixedRate(plugin, (o) -> task.accept(null), initialDelayTicks, periodTicks));
 	}
+
 	/**
 	 * Attempts to cancel all tasks scheduled by the specified plugin.
 	 *
@@ -104,6 +94,7 @@ public class GlobalRegionScheduler {
 			Bukkit.getScheduler().cancelTasks(plugin);
 			return;
 		}
+
 		globalRegionScheduler.cancelTasks(plugin);
 	}
 }

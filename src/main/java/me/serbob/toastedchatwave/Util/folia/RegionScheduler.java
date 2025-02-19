@@ -1,22 +1,3 @@
-/*
- * This file is part of HuskClaims, licensed under the Apache License 2.0.
- *
- *  Copyright (c) William278 <will27528@gmail.com>
- *  Copyright (c) contributors
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package me.serbob.toastedchatwave.Util.folia;
 
 import org.bukkit.Bukkit;
@@ -38,6 +19,7 @@ public class RegionScheduler {
 			bukkitScheduler = Bukkit.getScheduler();
 		}
 	}
+
 	/**
 	 * Schedules a task to be executed on the region which owns the location.
 	 *
@@ -52,8 +34,10 @@ public class RegionScheduler {
 			bukkitScheduler.runTask(plugin, run);
 			return;
 		}
+
 		regionScheduler.execute(plugin, world, chunkX, chunkZ, run);
 	}
+
 	/**
 	 * Schedules a task to be executed on the region which owns the location.
 	 *
@@ -62,13 +46,9 @@ public class RegionScheduler {
 	 * @param run      The task to execute
 	 */
 	public void execute(@NotNull Plugin plugin, @NotNull Location location, @NotNull Runnable run) {
-//		if (!FoliaScheduler.isFolia) {
-//			Bukkit.getScheduler().runTask(plugin, run);
-//			return;
-//		}
-		System.out.println("region: " + regionScheduler);
 		regionScheduler.execute(plugin, location, run);
 	}
+
 	/**
 	 * Schedules a task to be executed on the region which owns the location on the next tick.
 	 *
@@ -83,8 +63,10 @@ public class RegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(Bukkit.getScheduler().runTask(plugin, () -> task.accept(null)));
 		}
+
 		return new TaskWrapper(regionScheduler.run(plugin, world, chunkX, chunkZ, (o) -> task.accept(null)));
 	}
+
 	/**
 	 * Schedules a task to be executed on the region which owns the location on the next tick.
 	 *
@@ -97,8 +79,10 @@ public class RegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(Bukkit.getScheduler().runTask(plugin, () -> task.accept(null)));
 		}
+
 		return new TaskWrapper(regionScheduler.run(plugin, location, (o) -> task.accept(null)));
 	}
+
 	/**
 	 * Schedules a task to be executed on the region which owns the location after the specified delay in ticks.
 	 *
@@ -115,8 +99,10 @@ public class RegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(Bukkit.getScheduler().runTaskLater(plugin, () -> task.accept(null), delayTicks));
 		}
+
 		return new TaskWrapper(regionScheduler.runDelayed(plugin, world, chunkX, chunkZ, (o) -> task.accept(null), delayTicks));
 	}
+
 	/**
 	 * Schedules a task to be executed on the region which owns the location after the specified delay in ticks.
 	 *
@@ -131,8 +117,10 @@ public class RegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(Bukkit.getScheduler().runTaskLater(plugin, () -> task.accept(null), delayTicks));
 		}
+
 		return new TaskWrapper(regionScheduler.runDelayed(plugin, location, (o) -> task.accept(null), delayTicks));
 	}
+
 	/**
 	 * Schedules a repeating task to be executed on the region which owns the location after the initial delay with the specified period.
 	 *
@@ -151,8 +139,10 @@ public class RegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(Bukkit.getScheduler().runTaskTimer(plugin, () -> task.accept(null), initialDelayTicks, periodTicks));
 		}
+
 		return new TaskWrapper(regionScheduler.runAtFixedRate(plugin, world, chunkX, chunkZ, (o) -> task.accept(null), initialDelayTicks, periodTicks));
 	}
+
 	/**
 	 * Schedules a repeating task to be executed on the region which owns the location after the initial delay with the specified period.
 	 *
@@ -169,6 +159,7 @@ public class RegionScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(Bukkit.getScheduler().runTaskTimer(plugin, () -> task.accept(null), initialDelayTicks, periodTicks));
 		}
+
 		return new TaskWrapper(regionScheduler.runAtFixedRate(plugin, location, (o) -> task.accept(null), initialDelayTicks, periodTicks));
 	}
 }

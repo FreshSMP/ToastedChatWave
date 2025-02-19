@@ -43,11 +43,9 @@ public class WaveManager {
 
     public static void sendRewardMessages(Player player) {
         FoliaScheduler.getAsyncScheduler().runDelayed(ToastedChatWave.instance,
-            $ -> {
-                ToastedChatWave.instance.getConfig().getStringList("reward-messages").stream()
-                    .filter(msg -> !msg.equalsIgnoreCase("NONE"))
-                    .forEach(msg -> player.sendMessage(ChatUtil.c(msg)));
-            }, 50, TimeUnit.MILLISECONDS);
+            $ -> ToastedChatWave.instance.getConfig().getStringList("reward-messages").stream()
+                .filter(msg -> !msg.equalsIgnoreCase("NONE"))
+                .forEach(msg -> player.sendMessage(ChatUtil.c(msg))), 50, TimeUnit.MILLISECONDS);
     }
 
     public static void sendRewards(Player player) {
@@ -76,7 +74,6 @@ public class WaveManager {
             String finalCommand = command.replace("{player}", player.getName());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand);
         });
-
     }
 
     public static void manageAftermath(Player player) {
@@ -95,8 +92,7 @@ public class WaveManager {
                 .replace("{message}", message)
                 .replace("{color}", randomColor))
                 .replace("{wave}", currentWave)
-                .replace("{word}", ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word", ""))
-                ;
+                .replace("{word}", ToastedChatWave.instance.getConfig().getString("waves." + currentWave + ".word", ""));
 
         return isPAPIenabled() ? me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, newMessage) : newMessage;
     }

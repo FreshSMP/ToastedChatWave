@@ -5,7 +5,6 @@ import me.serbob.toastedchatwave.Util.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -18,27 +17,23 @@ public class ChatWave implements Listener {
         this.currentEventPriority=currentEventPriority;
     }
 
-/*    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
-        executeChatWave(event);
-    }*/
-
     public static void executeChatWave(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
+        String message = event.getMessage().toUpperCase();
 
-        if(!isAvailable(event.getMessage()))
+        if (!isAvailable(event.getMessage()))
             return;
 
-        if(receiveRewards(player)) {
+        if (receiveRewards(player)) {
             sendRewardMessages(player);
             sendRewards(player);
             manageAftermath(player);
         }
 
-        if(ToastedChatWave.instance.getConfig().getString("show_in_chat_method").equalsIgnoreCase("message_reformat")) {
-            event.setFormat(ChatUtil.c(formatFinalMessage(player, ChatColor.stripColor(event.getMessage()))));
+        if (ToastedChatWave.instance.getConfig().getString("show_in_chat_method").equalsIgnoreCase("message_reformat")) {
+            event.setFormat(ChatUtil.c(formatFinalMessage(player, ChatColor.stripColor(message))));
         } else {
-            Bukkit.broadcastMessage(ChatUtil.c(formatFinalMessage(player, ChatColor.stripColor(event.getMessage()))));
+            Bukkit.broadcastMessage(ChatUtil.c(formatFinalMessage(player, ChatColor.stripColor(message))));
             event.setCancelled(true);
         }
     }

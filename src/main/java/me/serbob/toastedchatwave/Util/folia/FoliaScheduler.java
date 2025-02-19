@@ -1,22 +1,3 @@
-/*
- * This file is part of HuskClaims, licensed under the Apache License 2.0.
- *
- *  Copyright (c) William278 <will27528@gmail.com>
- *  Copyright (c) contributors
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package me.serbob.toastedchatwave.Util.folia;
 
 import org.bukkit.Bukkit;
@@ -43,14 +24,17 @@ public class FoliaScheduler {
 		} catch (ClassNotFoundException e) {
 			folia = false;
 		}
+
 		isFolia = folia;
 	}
+
 	/**
 	 * @return Whether the server is running Folia
 	 */
 	public static boolean isFolia() {
 		return isFolia;
 	}
+
 	/**
 	 * Returns the async scheduler.
 	 *
@@ -60,8 +44,10 @@ public class FoliaScheduler {
 		if (asyncScheduler == null) {
 			asyncScheduler = new AsyncScheduler();
 		}
+
 		return asyncScheduler;
 	}
+
 	/**
 	 * Returns the entity scheduler.
 	 *
@@ -71,8 +57,10 @@ public class FoliaScheduler {
 		if (entityScheduler == null) {
 			entityScheduler = new EntityScheduler();
 		}
+
 		return entityScheduler;
 	}
+
 	/**
 	 * Returns the global region scheduler.
 	 *
@@ -82,8 +70,10 @@ public class FoliaScheduler {
 		if (globalRegionScheduler == null) {
 			globalRegionScheduler = new GlobalRegionScheduler();
 		}
+
 		return globalRegionScheduler;
 	}
+
 	/**
 	 * Returns the region scheduler.
 	 *
@@ -93,8 +83,10 @@ public class FoliaScheduler {
 		if (regionScheduler == null) {
 			regionScheduler = new RegionScheduler();
 		}
+
 		return regionScheduler;
 	}
+
 	/**
 	 * Run a task after the server has finished initializing.
 	 * Undefined behavior if called after the server has finished initializing.
@@ -109,6 +101,7 @@ public class FoliaScheduler {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, run);
 			return;
 		}
+
 		Bukkit.getServer().getPluginManager().registerEvent(regionizedServerInitEventClass, new Listener() {
 		}, EventPriority.HIGHEST, (listener, event) -> run.run(), plugin);
 	}

@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +24,9 @@ import static me.serbob.toastedchatwave.Managers.WaveManager.*;
 
 public class ChatWaveCommand implements CommandExecutor {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage(ChatUtil.c("&cInvalid args"));
+            sender.sendMessage(ChatUtil.c("&cInvalid arguments."));
             return false;
         }
 
@@ -35,7 +36,7 @@ public class ChatWaveCommand implements CommandExecutor {
             case "reload":
                 return handleReloadCommand(sender);
             default:
-                sender.sendMessage(ChatUtil.c("&cUnknown subcommand"));
+                sender.sendMessage(ChatUtil.c("&cUnknown subcommand."));
                 return false;
         }
     }
@@ -104,8 +105,8 @@ public class ChatWaveCommand implements CommandExecutor {
 
     private void loadConfigValues() {
         // To any contributor reading this...
-        // If you want to change anything please use managers
-        // Then load them inside onEnable and put them here too for reload...
+        // If you want to change anything, please use managers,
+        // then load them inside onEnable and put them here too for reload...
     }
 
     private void startWave(String waveName) {

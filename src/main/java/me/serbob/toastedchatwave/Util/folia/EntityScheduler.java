@@ -1,22 +1,3 @@
-/*
- * This file is part of HuskClaims, licensed under the Apache License 2.0.
- *
- *  Copyright (c) William278 <will27528@gmail.com>
- *  Copyright (c) contributors
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package me.serbob.toastedchatwave.Util.folia;
 
 import org.bukkit.Bukkit;
@@ -35,6 +16,7 @@ public class EntityScheduler {
 			bukkitScheduler = Bukkit.getScheduler();
 		}
 	}
+
 	/**
 	 * Schedules a task with the given delay. If the task failed to schedule because the scheduler is retired (entity removed), then returns false.
 	 * Otherwise, either the run callback will be invoked after the specified delay, or the retired callback will be invoked if the scheduler is retired.
@@ -53,8 +35,10 @@ public class EntityScheduler {
 			bukkitScheduler.runTaskLater(plugin, run, delay);
 			return;
 		}
+
 		entity.getScheduler().execute(plugin, run, retired, delay);
 	}
+
 	/**
 	 * Schedules a task to execute on the next tick. If the task failed to schedule because the scheduler is retired (entity removed),
 	 * then returns null. Otherwise, either the task callback will be invoked after the specified delay,
@@ -73,8 +57,10 @@ public class EntityScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTask(plugin, () -> task.accept(null)));
 		}
+
 		return new TaskWrapper(entity.getScheduler().run(plugin, (o) -> task.accept(null), retired));
 	}
+
 	/**
 	 * Schedules a task with the given delay. If the task failed to schedule because the scheduler is retired (entity removed),
 	 * then returns null. Otherwise, either the task callback will be invoked after the specified delay, or the retired callback will be invoked if the scheduler is retired.
@@ -94,8 +80,10 @@ public class EntityScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskLater(plugin, () -> task.accept(null), delayTicks));
 		}
+
 		return new TaskWrapper(entity.getScheduler().runDelayed(plugin, (o) -> task.accept(null), retired, delayTicks));
 	}
+
 	/**
 	 * Schedules a repeating task with the given delay and period. If the task failed to schedule because the scheduler is retired (entity removed),
 	 * then returns null. Otherwise, either the task callback will be invoked after the specified delay, or the retired callback will be invoked if the scheduler is retired.
@@ -117,6 +105,7 @@ public class EntityScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskTimer(plugin, () -> task.accept(null), initialDelayTicks, periodTicks));
 		}
+
 		return new TaskWrapper(entity.getScheduler().runAtFixedRate(plugin, (o) -> task.accept(null), retired, initialDelayTicks, periodTicks));
 	}
 }

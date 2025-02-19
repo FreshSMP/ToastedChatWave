@@ -16,13 +16,13 @@ public final class ToastedChatWave extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance=this;
+        instance = this;
         saveDefaultConfig();
         File configFile = new File(getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);
 
         String eventPriority = getConfig().getString("chat_listener_priority");
-        if(eventPriority==null) {
+        if (eventPriority == null) {
             getServer().getPluginManager().registerEvents(new HighestPriorityChatWave(), this);
         } else {
             registerEventHandlers(eventPriority);
@@ -61,14 +61,14 @@ public final class ToastedChatWave extends JavaPlugin {
     }
 
     public void registerPermissions() {
-        for(String key:config.getStringList("permissions")) {
-            String permissionName = "wave.reward."+key;
-            if(getServer().getPluginManager().getPermission(permissionName)==null) {
+        for (String key:config.getStringList("permissions")) {
+            String permissionName = "wave.reward." + key;
+            if (getServer().getPluginManager().getPermission(permissionName)==null) {
                 Permission permission = new Permission(permissionName);
                 getServer().getPluginManager().addPermission(permission);
             }
         }
 
-        Bukkit.getLogger().info("Permissions reigstered!");
+        Bukkit.getLogger().info("Permissions successfully registered!");
     }
 }

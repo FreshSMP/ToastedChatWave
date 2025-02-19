@@ -1,22 +1,3 @@
-/*
- * This file is part of HuskClaims, licensed under the Apache License 2.0.
- *
- *  Copyright (c) William278 <will27528@gmail.com>
- *  Copyright (c) contributors
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package me.serbob.toastedchatwave.Util.folia;
 
 import org.bukkit.Bukkit;
@@ -37,6 +18,7 @@ public class AsyncScheduler {
 			bukkitScheduler = Bukkit.getScheduler();
 		}
 	}
+
 	/**
 	 * Schedules the specified task to be executed asynchronously immediately.
 	 *
@@ -48,8 +30,10 @@ public class AsyncScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskAsynchronously(plugin, () -> task.accept(null)));
 		}
+
 		return new TaskWrapper(asyncScheduler.runNow(plugin, (o) -> task.accept(null)));
 	}
+
 	/**
 	 * Schedules the specified task to be executed asynchronously after the specified delay.
 	 *
@@ -63,6 +47,7 @@ public class AsyncScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskLaterAsynchronously(plugin, () -> task.accept(null), convertTimeToTicks(delay, timeUnit)));
 		}
+
 		return new TaskWrapper(asyncScheduler.runDelayed(plugin, (o) -> task.accept(null), delay, timeUnit));
 	}
 	/**
@@ -80,8 +65,10 @@ public class AsyncScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskTimerAsynchronously(plugin, () -> task.accept(null), convertTimeToTicks(delay, timeUnit), convertTimeToTicks(period, timeUnit)));
 		}
+
 		return new TaskWrapper(asyncScheduler.runAtFixedRate(plugin, (o) -> task.accept(null), delay, period, timeUnit));
 	}
+
 	/**
 	 * Schedules the specified task to be executed asynchronously after the initial delay has passed, and then periodically executed.
 	 *
@@ -96,8 +83,10 @@ public class AsyncScheduler {
 		if (!FoliaScheduler.isFolia) {
 			return new TaskWrapper(bukkitScheduler.runTaskTimerAsynchronously(plugin, () -> task.accept(null), initialDelayTicks, periodTicks));
 		}
+
 		return new TaskWrapper(asyncScheduler.runAtFixedRate(plugin, (o) -> task.accept(null), initialDelayTicks * 50, periodTicks * 50, TimeUnit.MILLISECONDS));
 	}
+
 	/**
 	 * Attempts to cancel all tasks scheduled by the specified plugin.
 	 *
@@ -108,8 +97,10 @@ public class AsyncScheduler {
 			bukkitScheduler.cancelTasks(plugin);
 			return;
 		}
+
 		asyncScheduler.cancelTasks(plugin);
 	}
+
 	/**
 	 * Converts the specified time to ticks.
 	 *
