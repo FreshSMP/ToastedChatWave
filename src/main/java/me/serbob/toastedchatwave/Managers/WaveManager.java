@@ -49,7 +49,7 @@ public class WaveManager {
     }
 
     public static void sendRewards(Player player) {
-        FoliaScheduler.getAsyncScheduler().runNow(ToastedChatWave.instance, $->{
+        FoliaScheduler.getAsyncScheduler().runNow(ToastedChatWave.instance, $ -> {
             String tierPath = "waves." + currentWave + ".reward-commands." + TierUtils.getHighestTier(player);
             ToastedChatWave.instance.getConfig().getStringList(tierPath).stream()
                 .filter(command -> !command.equalsIgnoreCase("NONE"))

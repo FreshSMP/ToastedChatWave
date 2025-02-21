@@ -116,7 +116,7 @@ public class ChatWaveCommand implements CommandExecutor {
 
         sendBroadcastMessages("waves." + currentWave + ".wave-started");
 
-        FoliaScheduler.getAsyncScheduler().runDelayed(ToastedChatWave.instance, $->{
+        FoliaScheduler.getAsyncScheduler().runDelayed(ToastedChatWave.instance, $ -> {
             isActive = false;
             sendBroadcastMessages("waves." + currentWave + ".wave-ended");
         }, 20L * ToastedChatWave.instance.getConfig().getInt("waves." + currentWave + ".wave-length") * 50, TimeUnit.MILLISECONDS);
