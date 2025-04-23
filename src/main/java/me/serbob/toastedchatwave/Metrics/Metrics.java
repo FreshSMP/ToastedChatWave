@@ -25,7 +25,6 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 import javax.net.ssl.HttpsURLConnection;
-
 import me.serbob.toastedchatwave.Util.folia.FoliaScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
