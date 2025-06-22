@@ -15,12 +15,12 @@ import static me.serbob.toastedchatwave.APIs.PlaceholderAPI.isPAPIenabled;
 
 public class WaveManager {
     public static boolean isActive = false;
-    public static Set<Player> playersReceived = new HashSet<>();
+    public static Set<UUID> playersReceived = new HashSet<>();
     public static String currentWave;
     private static final Random random = new Random();
 
     public static boolean receiveRewards(Player player) {
-        return !playersReceived.contains(player);
+        return !playersReceived.contains(player.getUniqueId());
     }
 
     public static boolean isAvailable(String message) {
@@ -73,7 +73,7 @@ public class WaveManager {
     }
 
     public static void manageAftermath(Player player) {
-        playersReceived.add(player);
+        playersReceived.add(player.getUniqueId());
     }
 
     public static String formatFinalMessage(Player player, String message) {
